@@ -258,14 +258,6 @@ class Scaffolding extends EventTarget {
     this.relayout();
   }
 
-  _dontstretch () {
-    width = height / this.height * this.width;
-    if (width > projectAreaWidth) {
-      height = projectAreaWidth / this.width * this.height;
-      width = projectAreaWidth;
-    }
-  }
-
   relayout () {
     const totalWidth = Math.max(1, this._root.offsetWidth);
     const totalHeight = Math.max(1, this._root.offsetHeight);
@@ -298,7 +290,6 @@ class Scaffolding extends EventTarget {
           this.width = 8640;
         } else{
           this.width = width / height * this.height;
-          this._dontstretch();
         }
         this.vm.setStageSize(this.width, this.height);
       } else {
@@ -310,10 +301,9 @@ class Scaffolding extends EventTarget {
       // setStageSize is a TurboWarp-specific method
       if (this.vm.setStageSize) {
         if(height / width * this.width > 8640) {// clamp this.height to a size that doesn't break the project
-          this.height = 8640;
+          this.height = 8640
         } else{
           this.height = height / width * this.width;
-          this._dontstretch();
         }
         this.vm.setStageSize(this.width, this.height);
       } else {
@@ -322,7 +312,11 @@ class Scaffolding extends EventTarget {
     }
 
     if (this.resizeMode !== 'stretch' && this.resizeMode !== 'keep_width' && this.resizeMode !== 'keep_height') {
-      this._dontstretch();
+      width = height / this.height * this.width;
+      if (width > projectAreaWidth) {
+        height = projectAreaWidth / this.width * this.height;
+        width = projectAreaWidth;
+      }
     }
 
     const distanceFromTop = totalHeight - height;
