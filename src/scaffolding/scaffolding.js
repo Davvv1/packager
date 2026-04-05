@@ -286,7 +286,11 @@ class Scaffolding extends EventTarget {
     if (this.resizeMode === 'keep-height') {
       // setStageSize is a TurboWarp-specific method
       if (this.vm.setStageSize) {
-        this.width = width / height * this.height;
+        if(width / height * this.height > 4320) {// clamp this.width to a size that doesn't break the project
+          this.width = width / height * this.height;
+        } else{
+          this.width = 4320;
+        }
         this.vm.setStageSize(this.width, this.height);
       } else {
         console.warn('keep-height not supported: vm does not implement setStageSize');
@@ -296,7 +300,11 @@ class Scaffolding extends EventTarget {
     if (this.resizeMode === 'keep-width') {
       // setStageSize is a TurboWarp-specific method
       if (this.vm.setStageSize) {
-        this.height = height / width * this.width;
+        if(height / width * this.width > 4320) {// clamp this.height to a size that doesn't break the project
+          this.height = 4320
+        } else{
+          this.height = height / width * this.width;
+        }
         this.vm.setStageSize(this.width, this.height);
       } else {
         console.warn('keep-width not supported: vm does not implement setStageSize');
