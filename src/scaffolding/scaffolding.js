@@ -258,6 +258,14 @@ class Scaffolding extends EventTarget {
     this.relayout();
   }
 
+  _dontstretch () {
+    width = height / this.height * this.width;
+    if (width > projectAreaWidth) {
+      height = projectAreaWidth / this.width * this.height;
+      width = projectAreaWidth;
+    }
+  }
+
   relayout () {
     const totalWidth = Math.max(1, this._root.offsetWidth);
     const totalHeight = Math.max(1, this._root.offsetHeight);
@@ -288,15 +296,9 @@ class Scaffolding extends EventTarget {
       if (this.vm.setStageSize) {
         if(width / height * this.height > 8640) {// clamp this.width to a size that doesn't break the project
           this.width = 8640;
-
-          width = height / this.height * this.width; // Stretch the stage to fit window when size clamped
-          if (width > projectAreaWidth) {
-            height = projectAreaWidth / this.width * this.height;
-            width = projectAreaWidth;
-          }
-
         } else{
           this.width = width / height * this.height;
+          this._dontstretch();
         }
         this.vm.setStageSize(this.width, this.height);
       } else {
@@ -308,16 +310,10 @@ class Scaffolding extends EventTarget {
       // setStageSize is a TurboWarp-specific method
       if (this.vm.setStageSize) {
         if(height / width * this.width > 8640) {// clamp this.height to a size that doesn't break the project
-          this.height = 8640
-
-          width = height / this.height * this.width; // Stretch the stage to fit window when size clamped
-          if (width > projectAreaWidth) {
-            height = projectAreaWidth / this.width * this.height;
-            width = projectAreaWidth;
-          }
-
+          this.height = 8640;
         } else{
           this.height = height / width * this.width;
+          this._dontstretch();
         }
         this.vm.setStageSize(this.width, this.height);
       } else {
@@ -325,12 +321,8 @@ class Scaffolding extends EventTarget {
       }
     }
 
-    if (this.resizeMode !== 'stretch') {
-      width = height / this.height * this.width;
-      if (width > projectAreaWidth) {
-        height = projectAreaWidth / this.width * this.height;
-        width = projectAreaWidth;
-      }
+    if (this.resizeMode !== 'stretch' && this.resizeMode !== 'keep_width' && this.resizeMode !== 'keep_height') {
+      this._dontstretch();
     }
 
     const distanceFromTop = totalHeight - height;
