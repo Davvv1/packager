@@ -287,9 +287,9 @@ class Scaffolding extends EventTarget {
       // setStageSize is a TurboWarp-specific method
       if (this.vm.setStageSize) {
         if(width / height * this.height > 4320) {// clamp this.width to a size that doesn't break the project
-          this.width = width / height * this.height;
-        } else{
           this.width = 4320;
+        } else{
+          this.width = width / height * this.height;
         }
         this.vm.setStageSize(this.width, this.height);
       } else {
