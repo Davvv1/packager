@@ -286,8 +286,15 @@ class Scaffolding extends EventTarget {
     if (this.resizeMode === 'keep-height') {
       // setStageSize is a TurboWarp-specific method
       if (this.vm.setStageSize) {
-        if(width / height * this.height > 4320) {// clamp this.width to a size that doesn't break the project
-          this.width = 4320;
+        if(width / height * this.height > 8640) {// clamp this.width to a size that doesn't break the project
+          this.width = 8640;
+
+          width = height / this.height * this.width; // Stretch the stage to fit window when size clamped
+          if (width > projectAreaWidth) {
+            height = projectAreaWidth / this.width * this.height;
+            width = projectAreaWidth;
+          }
+
         } else{
           this.width = width / height * this.height;
         }
@@ -300,8 +307,15 @@ class Scaffolding extends EventTarget {
     if (this.resizeMode === 'keep-width') {
       // setStageSize is a TurboWarp-specific method
       if (this.vm.setStageSize) {
-        if(height / width * this.width > 4320) {// clamp this.height to a size that doesn't break the project
-          this.height = 4320
+        if(height / width * this.width > 8640) {// clamp this.height to a size that doesn't break the project
+          this.height = 8640
+
+          width = height / this.height * this.width; // Stretch the stage to fit window when size clamped
+          if (width > projectAreaWidth) {
+            height = projectAreaWidth / this.width * this.height;
+            width = projectAreaWidth;
+          }
+
         } else{
           this.height = height / width * this.width;
         }
